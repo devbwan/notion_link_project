@@ -1,0 +1,54 @@
+version: 1
+
+notion:
+  properties:
+    title: "제목"
+    status: "상태"
+    category: "분류"
+    content: "본문"
+    tags: "태그"
+    format: "출력 형식"
+    created_at: "생성일"
+    updated_at: "수정일"
+    error_message: "오류 메시지"
+  statuses:
+    draft: "작성 중"
+    request: "변환 요청"
+    success: "완료"
+    error: "오류"
+  write_status: true
+
+fields:
+  type:
+    source: category
+    required: true
+    normalize: [trim, lowercase]
+  title:
+    source: title
+    required: true
+    normalize: [trim, collapse_whitespace]
+  content:
+    source: content
+    required: true
+    normalize: [trim]
+  tags:
+    source: tags
+    required: false
+    normalize: [deduplicate]
+
+output:
+  default_format: markdown
+  allowed_formats: [markdown, json, csv]
+  root: output
+  path_template: "{category}/{page_id}.{extension}"
+  empty_values: omit
+  csv:
+    columns: [type, title, content, tags, notion_page_id]
+    multi_value_separator: "|"
+    encoding: utf-8
+    include_header: true
+
+datetime:
+  input_timezone: Asia/Seoul
+  output_timezone: UTC
+  format: iso8601
