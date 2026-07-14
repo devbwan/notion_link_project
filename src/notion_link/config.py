@@ -4,41 +4,17 @@ from __future__ import annotations
 
 import os
 from pathlib import Path
-from typing import Any
+from typing import Any, Literal
 
 import yaml
-from pydantic import BaseModel, Field, field_validator
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
-class NotionPropertiesConfig(BaseModel):
-    title: str
-    status: str
-    category: str
-    content: str
-    tags: str
-    format: str
-    created_at: str
-    updated_at: str
-    error_message: str
+class DocumentConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
 
-
-class NotionStatusesConfig(BaseModel):
-    draft: str
-    request: str
-    success: str
-    error: str
-
-
-class NotionConfig(BaseModel):
-    properties: NotionPropertiesConfig
-    statuses: NotionStatusesConfig
-    write_status: bool = True
-
-
-class FieldConfig(BaseModel):
-    source: str
-    required: bool
-    normalize: list[str] = Field(default_factory=list)
+    category: str = "notion"
+    format: Literal["markdown", "json", "csv"] = "markdown"
 
 
 class CsvConfig(BaseModel):
@@ -65,18 +41,12 @@ class OutputConfig(BaseModel):
         return v
 
 
-class DatetimeConfig(BaseModel):
-    input_timezone: str = "Asia/Seoul"
-    output_timezone: str = "UTC"
-    format: str = "iso8601"
-
-
 class MappingsConfig(BaseModel):
+    model_config = ConfigDict(extra="forbid")
+
     version: int
-    notion: NotionConfig
-    fields: dict[str, FieldConfig]
+    document: DocumentConfig = Field(default_factory=DocumentConfig)
     output: OutputConfig
-    datetime: DatetimeConfig
 
     @field_validator("version")
     @classmethod
@@ -88,8 +58,7 @@ class MappingsConfig(BaseModel):
 
 class EnvConfig(BaseModel):
     notion_token: str
-    notion_database_id: str
-    notion_data_source_id: str | None = None
+    notion_page_id: str
 
 
 def load_env() -> EnvConfig:
@@ -100,8 +69,7 @@ def load_env() -> EnvConfig:
 
     return EnvConfig(
         notion_token=os.environ["NOTION_TOKEN"],
-        notion_database_id=os.environ["NOTION_DATABASE_ID"],
-        notion_data_source_id=os.environ.get("NOTION_DATA_SOURCE_ID"),
+        notion_page_id=os.environ["NOTION_PAGE_ID"],
     )
 
 

@@ -33,39 +33,24 @@ class NotionClient:
     def __exit__(self, *args: object) -> None:
         self.close()
 
-    def get_database(self, database_id: str) -> dict[str, Any]:
-        """Retrieve database metadata including data sources."""
-        response = self._client.get(f"/databases/{database_id}")
+    def get_page(self, page_id: str) -> dict[str, Any]:
+        """Retrieve page metadata and properties."""
+        response = self._client.get(f"/pages/{page_id}")
         response.raise_for_status()
         return response.json()
 
-    def get_data_source(self, data_source_id: str) -> dict[str, Any]:
-        """Retrieve data source schema."""
-        response = self._client.get(f"/data_sources/{data_source_id}")
-        response.raise_for_status()
-        return response.json()
-
-    def query_data_source(
+    def get_block_children(
         self,
-        data_source_id: str,
+        block_id: str,
         *,
-        filter_: dict[str, Any] | None = None,
         start_cursor: str | None = None,
         page_size: int = 100,
     ) -> dict[str, Any]:
-        """Query pages from a data source."""
-        payload: dict[str, Any] = {"page_size": page_size}
-        if filter_:
-            payload["filter"] = filter_
+        """Retrieve one page of child blocks for a page or block."""
+        params: dict[str, Any] = {"page_size": page_size}
         if start_cursor:
-            payload["start_cursor"] = start_cursor
+            params["start_cursor"] = start_cursor
 
-        response = self._client.post(f"/data_sources/{data_source_id}/query", json=payload)
-        response.raise_for_status()
-        return response.json()
-
-    def update_page(self, page_id: str, properties: dict[str, Any]) -> dict[str, Any]:
-        """Update page properties."""
-        response = self._client.patch(f"/pages/{page_id}", json={"properties": properties})
+        response = self._client.get(f"/blocks/{block_id}/children", params=params)
         response.raise_for_status()
         return response.json()

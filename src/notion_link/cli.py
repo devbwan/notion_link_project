@@ -58,12 +58,7 @@ def cmd_validate_config(args: argparse.Namespace) -> int:
         logger.info("Configuration is valid")
 
         env = load_env()
-        logger.info(f"Database ID: ...{env.notion_database_id[-8:]}")
-
-        if env.notion_data_source_id:
-            logger.info(f"Data source ID: ...{env.notion_data_source_id[-8:]}")
-        else:
-            logger.info("Data source ID: (auto-detect)")
+        logger.info(f"Page ID: ...{env.notion_page_id[-8:]}")
 
         return 0
 

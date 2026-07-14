@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Notion database to local file converter. Syncs pages from a Notion database to local Markdown, JSON, or CSV files.
+Notion document to local file extractor. Reads one shared Notion page and recursively converts its blocks to a local file.
 
 ## Build/Test/Lint Commands
 
@@ -16,7 +16,7 @@ python -m pip install -e ".[dev]"
 pytest
 
 # Run single test
-pytest tests/notion_link/test_validator.py::TestValidator::test_validate_valid_page
+pytest tests/notion_link/test_fetcher.py
 
 # Lint
 ruff check .
@@ -36,17 +36,16 @@ python -m notion_link sync
 ```
 src/notion_link/       — main package
   config.py            — configuration loading/validation (Pydantic models)
-  models.py            — data models (NotionPage, PageRecord, ProcessingResult)
+  models.py            — normalized document and processing result models
   notion_client.py     — Notion API HTTP client (httpx)
-  fetcher.py           — query pages with 'request' status
-  validator.py         — validate required properties
-  transformer.py       — convert Notion page to PageRecord
+  fetcher.py           — recursively fetch page blocks with pagination
+  document_extractor.py — convert a Notion block tree to PageRecord
   writer.py            — serialize and write to files
   state_store.py       — SQLite state tracking
   service.py           — orchestrates sync flow
   cli.py               — CLI entry point
 tests/notion_link/     — unit tests (pytest)
-config/mappings.yaml   — field mapping configuration
+config/mappings.yaml   — document output configuration
 ```
 
 ## Key Patterns
@@ -59,8 +58,8 @@ config/mappings.yaml   — field mapping configuration
 
 ## Configuration
 
-- `config/mappings.yaml` — field mapping, status values, output format
-- `.env` — `NOTION_TOKEN`, `NOTION_DATABASE_ID`, optional `NOTION_DATA_SOURCE_ID`
+- `config/mappings.yaml` — document category and output configuration
+- `.env` — `NOTION_TOKEN`, `NOTION_PAGE_ID`
 
 ## Testing
 
@@ -70,7 +69,7 @@ config/mappings.yaml   — field mapping configuration
 
 ## Security
 
-Never commit tokens or real database IDs. Use `.env.example` as template.
+Never commit tokens or real page IDs.
 
 ---
 

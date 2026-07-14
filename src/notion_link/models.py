@@ -8,15 +8,6 @@ from typing import Literal
 from pydantic import BaseModel
 
 
-class NotionPage(BaseModel):
-    """Raw page data from Notion API."""
-
-    id: str
-    created_time: datetime
-    last_edited_time: datetime
-    properties: dict
-
-
 class PageRecord(BaseModel):
     """Normalized internal representation of a page."""
 
