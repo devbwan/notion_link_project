@@ -63,8 +63,6 @@ class SyncService:
         self._fetcher = Fetcher(client)
         self._extractor = DocumentExtractor(config)
         self._writer = Writer(config)
-        # State storage is initialized lazily so constructing the service, and in
-        # particular running a dry-run, does not create a local database.
         self._state: StateStore | None = None
 
     def _get_state(self) -> StateStore:
@@ -101,9 +99,14 @@ class SyncService:
         """Execute the sync logic."""
         page_id = self._env.notion_page_id
         logger.info(f"Reading Notion document: ...{page_id[-8:]}")
-        page, blocks = self._fetcher.fetch_document(page_id)
-        result = self._process_document(page, blocks, dry_run=dry_run)
-        results = [result]
+
+        all_pages = self._fetcher.fetch_all_pages(page_id)
+        logger.info(f"Found {len(all_pages)} page(s) to process")
+
+        results: list[ProcessingResult] = []
+        for page, blocks in all_pages:
+            result = self._process_document(page, blocks, dry_run=dry_run)
+            results.append(result)
 
         if not dry_run:
             self._get_state().mark_seen([r.notion_page_id for r in results])
@@ -165,7 +168,7 @@ class SyncService:
 
         except Exception as e:
             msg = str(e)[:200]
-            logger.exception(f"Error processing {page_id[-8:]}")
+            logger.warning(f"Error processing {page_id[-8:]}: {msg}")
             self._handle_error(page_id, last_edited, msg, dry_run=dry_run)
             return ProcessingResult(
                 notion_page_id=page_id,

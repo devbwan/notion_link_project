@@ -60,6 +60,15 @@ class EnvConfig(BaseModel):
     notion_token: str
     notion_page_id: str
 
+    @field_validator("notion_page_id")
+    @classmethod
+    def normalize_page_id(cls, v: str) -> str:
+        """Convert 32-char hex to UUID format (8-4-4-4-12)."""
+        v = v.replace("-", "")
+        if len(v) != 32:
+            raise ValueError("Page ID must be 32 hex characters")
+        return f"{v[:8]}-{v[8:12]}-{v[12:16]}-{v[16:20]}-{v[20:]}"
+
 
 def load_env() -> EnvConfig:
     """Load environment variables."""

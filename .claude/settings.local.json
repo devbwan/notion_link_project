@@ -10,7 +10,10 @@
       "Bash(python -m pytest:*)",
       "Bash(python -m ruff check:*)",
       "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" add -A)",
-      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" commit -m \"$\\(cat <<''EOF''\nfix: add tzdata dependency and fix lint issues\n\n- Add tzdata for Windows timezone support\n- Fix writer to use binary mode for consistent hashing\n- Remove unused readme field from pyproject.toml\n- Apply ruff auto-fixes \\(datetime.UTC, imports\\)\n- Fix B904 and B007 lint errors manually\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" commit -m \"$\\(cat <<''EOF''\nfix: add tzdata dependency and fix lint issues\n\n- Add tzdata for Windows timezone support\n- Fix writer to use binary mode for consistent hashing\n- Remove unused readme field from pyproject.toml\n- Apply ruff auto-fixes \\(datetime.UTC, imports\\)\n- Fix B904 and B007 lint errors manually\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" commit -m \"$\\(cat <<''EOF''\nrefactor: change from database sync to single document extractor\n\n- Remove database sync logic \\(validator.py, transformer.py, fetcher queries\\)\n- Add document_extractor.py to convert Notion block tree to Markdown\n- Update fetcher.py to recursively fetch page blocks with pagination\n- Update notion_client.py with get_page and get_block_children methods\n- Simplify config.py: remove Notion property mappings, add DocumentConfig\n- Update service.py to process single document instead of database pages\n- Update .env.example: NOTION_PAGE_ID instead of NOTION_DATABASE_ID\n- Remove obsolete docs \\(notion-schema.md, project-plan.md, transformation-rules.md\\)\n- Update getting-started.md for single document workflow\n- Add README.md with quick start guide\n- Add __main__.py for python -m notion_link support\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(NOTION_PAGE_ID=39d81a1a533580c48219d677ce48ff0d python -m notion_link:*)",
+      "Bash(python -m notion_link sync:*)"
     ]
   }
 }

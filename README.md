@@ -26,3 +26,5 @@ ruff check .
 ```
 
 기본 출력은 `output/notion/<page-id>.md`에 저장된다. 자세한 연결 및 설정 방법은 [빠른 시작](docs/getting-started.md)을 참고한다.
+
+하위 페이지 본문을 재귀적으로 추출하는 후속 요구사항은 [추가 변경사항](docs/additional-changes.md)에 정리되어 있다.

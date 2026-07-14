@@ -80,7 +80,13 @@ class DocumentExtractor:
         if block_type in {"bookmark", "embed", "link_preview"}:
             url = data.get("url", "")
             return [f"<{url}>", ""] if url else []
-        if block_type in {"child_page", "child_database"}:
+        if block_type == "child_page":
+            title = data.get("title", "")
+            page_id = block.get("id", "")
+            if title and page_id:
+                return [f"{indent}- [{title}](./{page_id}.md)", ""]
+            return [f"{indent}- {title}"] if title else []
+        if block_type == "child_database":
             title = data.get("title", "")
             return [f"{indent}- {title}"] if title else []
         return [f"{indent}{text}", ""] if text else []
