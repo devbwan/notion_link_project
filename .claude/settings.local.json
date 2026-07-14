@@ -1,0 +1,16 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" status)",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" diff --stat)",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" add CLAUDE.md .gitignore .env.example pyproject.toml config/ docs/ src/ tests/)",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" commit -m \"$\\(cat <<''EOF''\nfeat: add project structure with cross-platform file locking\n\n- Add pyproject.toml with hatchling build, dependencies \\(httpx, pydantic, pyyaml\\)\n- Add src/notion_link package: config, models, client, fetcher, validator,\n  transformer, writer, state_store, service, cli\n- Add tests with pytest fixtures and unit tests for validator, transformer, writer\n- Add docs: getting-started, notion-schema, transformation-rules, project-plan\n- Add config/mappings.yaml with field mapping configuration\n- Use msvcrt on Windows, fcntl on Unix for sync lock\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" push)",
+      "Bash(python -m pip install:*)",
+      "Bash(python -m pytest:*)",
+      "Bash(python -m ruff check:*)",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" add -A)",
+      "Bash(git -C \"C:\\\\Users\\\\PC\\\\orca\\\\notion_link_project\" commit -m \"$\\(cat <<''EOF''\nfix: add tzdata dependency and fix lint issues\n\n- Add tzdata for Windows timezone support\n- Fix writer to use binary mode for consistent hashing\n- Remove unused readme field from pyproject.toml\n- Apply ruff auto-fixes \\(datetime.UTC, imports\\)\n- Fix B904 and B007 lint errors manually\n\nCo-Authored-By: Claude Opus 4.5 <noreply@anthropic.com>\nEOF\n\\)\")"
+    ]
+  }
+}

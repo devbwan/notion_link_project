@@ -31,7 +31,7 @@ class Validator:
         page_id = page.get("id", "unknown")
         properties = page.get("properties", {})
 
-        for field_name, field_config in self._config.fields.items():
+        for _field_name, field_config in self._config.fields.items():
             if not field_config.required:
                 continue
 

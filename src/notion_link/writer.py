@@ -29,7 +29,8 @@ class Writer:
         Uses atomic write with temp file + rename.
         """
         content = self._serialize(record)
-        content_hash = hashlib.sha256(content.encode("utf-8")).hexdigest()
+        content_bytes = content.encode("utf-8")
+        content_hash = hashlib.sha256(content_bytes).hexdigest()
 
         path = self._resolve_path(record)
 
@@ -42,8 +43,8 @@ class Writer:
 
         fd, temp_path = tempfile.mkstemp(dir=path.parent, suffix=".tmp")
         try:
-            with open(fd, "w", encoding="utf-8") as f:
-                f.write(content)
+            with open(fd, "wb") as f:
+                f.write(content_bytes)
             Path(temp_path).replace(path)
         except Exception:
             Path(temp_path).unlink(missing_ok=True)

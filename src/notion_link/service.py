@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import logging
 import sys
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -81,7 +81,7 @@ class SyncService:
                 _lock_file(lock_file)
             except OSError:
                 logger.error("Another sync process is running")
-                raise SystemExit(3)
+                raise SystemExit(3) from None
 
             try:
                 return self._run_sync(dry_run=dry_run)
@@ -118,7 +118,7 @@ class SyncService:
         """Process a single page."""
         page_id = page["id"]
         last_edited = page.get("last_edited_time", "")
-        now = datetime.now(timezone.utc)
+        now = datetime.now(UTC)
 
         logger.debug(f"Processing page {page_id[-8:]}")
 

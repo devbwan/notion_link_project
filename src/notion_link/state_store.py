@@ -3,10 +3,10 @@
 from __future__ import annotations
 
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
-from datetime import datetime, timezone
+from datetime import UTC, datetime
 from pathlib import Path
-from typing import Iterator
 
 
 class StateStore:
@@ -70,7 +70,7 @@ class StateStore:
         output_path: str,
     ) -> None:
         """Record successful processing."""
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         with self._connect() as conn:
             conn.execute(
                 """
@@ -85,7 +85,7 @@ class StateStore:
 
     def save_error(self, page_id: str, last_edited_time: str, error_message: str) -> None:
         """Record failed processing."""
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         with self._connect() as conn:
             conn.execute(
                 """
@@ -100,7 +100,7 @@ class StateStore:
 
     def mark_seen(self, page_ids: list[str]) -> None:
         """Update last_seen_at for pages still in Notion."""
-        now = datetime.now(timezone.utc).isoformat()
+        now = datetime.now(UTC).isoformat()
         with self._connect() as conn:
             conn.executemany(
                 "UPDATE processed_pages SET last_seen_at = ? WHERE notion_page_id = ?",

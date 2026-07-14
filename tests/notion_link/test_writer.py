@@ -2,8 +2,7 @@
 
 from __future__ import annotations
 
-from datetime import datetime, timezone
-from pathlib import Path
+from datetime import UTC, datetime
 
 from notion_link.models import PageRecord
 from notion_link.writer import Writer
@@ -22,8 +21,8 @@ class TestWriter:
             content="본문 내용",
             tags=["개발", "일정"],
             format="markdown",
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         path, _ = writer.write(record)
@@ -45,8 +44,8 @@ class TestWriter:
             content="본문 내용",
             tags=["개발"],
             format="json",
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         path, _ = writer.write(record)
@@ -70,8 +69,8 @@ class TestWriter:
             content="본문 내용",
             tags=["개발", "일정"],
             format="csv",
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         path, _ = writer.write(record)
@@ -92,8 +91,8 @@ class TestWriter:
             content="내용",
             tags=[],
             format="markdown",
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         path1, hash1 = writer.write(record)
@@ -115,8 +114,8 @@ class TestWriter:
             content="내용",
             tags=[],
             format="markdown",
-            created_at=datetime.now(timezone.utc),
-            updated_at=datetime.now(timezone.utc),
+            created_at=datetime.now(UTC),
+            updated_at=datetime.now(UTC),
         )
 
         path, _ = writer.write(record)
